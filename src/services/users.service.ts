@@ -10,6 +10,12 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
+  async create(userData: Partial<User>): Promise<User> {
+    const newUser = this.usersRepository.create(userData);
+    await this.usersRepository.save(newUser);
+    return newUser;
+  }
+
   findAll(): Promise<User[]> {
     return this.usersRepository.find();
   }
