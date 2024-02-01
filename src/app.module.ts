@@ -4,6 +4,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { HttpModule } from './workloads/http/http.module';
 import { GqlModule } from './workloads/gql/gql.module';
+import { GrpcModule } from './workloads/grpc/grpc.module';
 import { DataModule } from './data/data.module';
 import metadata from './metadata';
 import { join } from 'path';
@@ -22,6 +23,7 @@ import { join } from 'path';
     }),
     DataModule,
     HttpModule,
+    GrpcModule,
     GqlModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,

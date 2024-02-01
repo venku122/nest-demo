@@ -1,9 +1,11 @@
 import { NestFactory } from '@nestjs/core';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { WinstonModule } from 'nest-winston';
 import { createLogger } from 'winston';
 import * as winston from 'winston';
 import { AppModule } from './app.module';
 import tracer from './tracer';
+import { join } from 'path';
 
 async function bootstrap() {
   tracer.start();
@@ -22,6 +24,16 @@ async function bootstrap() {
       instance,
     }),
   });
+
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.GRPC,
+    options: {
+      package: 'nest_demo',
+      protoPath: join(__dirname, 'protos/protobufs/users.proto'),
+      // url - lets you set the port to expose to grpc <default localhost:5000>
+    },
+  });
+  await app.startAllMicroservices();
   await app.listen(3000);
 }
 bootstrap();
