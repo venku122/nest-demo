@@ -3,18 +3,18 @@ import { UsersService } from '../../services/users.service';
 import { User } from '../../data/entities/user.entity';
 
 @Controller('users')
-export class UserController {
+export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
   getHello(): Promise<User[]> {
-    console.info('UserController.getHello');
+    console.info('UsersController.getHello');
     return this.usersService.findAll();
   }
 
   @Post('/create')
   create(@Body() userData: Partial<User>): Promise<User> {
-    console.info('UserController.create');
+    console.info('UsersController.create');
     return this.usersService.create(userData);
   }
 }

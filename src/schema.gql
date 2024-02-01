@@ -1,0 +1,14 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Query {
+  getUsers: [User!]!
+}
+
+type User {
+  firstName: String!
+  id: ID!
+  isActive: Boolean!
+  lastName: String!
+}
