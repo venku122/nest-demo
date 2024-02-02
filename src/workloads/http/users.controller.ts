@@ -8,7 +8,6 @@ type KeyValue = {
   value: string;
 };
 
-
 @Controller('users')
 export class UsersController {
   constructor(

@@ -1,11 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { WinstonModule } from 'nest-winston';
+import { join } from 'path';
 import { createLogger } from 'winston';
 import * as winston from 'winston';
+
 import { AppModule } from './app.module';
 import tracer from './tracer';
-import { join } from 'path';
 
 async function bootstrap() {
   tracer.start();
