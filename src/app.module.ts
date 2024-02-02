@@ -8,6 +8,9 @@ import { GrpcModule } from './workloads/grpc/grpc.module';
 import { DataModule } from './data/data.module';
 import metadata from './metadata';
 import { join } from 'path';
+import { ClientModule } from './clients/client.module';
+import { InvocationCountInterceptor } from './utils/interceptors/invocationCount.interceptor';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -21,6 +24,7 @@ import { join } from 'path';
       synchronize: true,
       autoLoadEntities: true,
     }),
+    ClientModule,
     DataModule,
     HttpModule,
     GrpcModule,
@@ -35,6 +39,11 @@ import { join } from 'path';
     }),
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: InvocationCountInterceptor,
+    },
+  ],
 })
 export class AppModule {}

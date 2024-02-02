@@ -25,14 +25,17 @@ async function bootstrap() {
     }),
   });
 
-  app.connectMicroservice<MicroserviceOptions>({
-    transport: Transport.GRPC,
-    options: {
-      package: 'nest_demo',
-      protoPath: join(__dirname, 'protos/protobufs/users.proto'),
-      // url - lets you set the port to expose to grpc <default localhost:5000>
+  app.connectMicroservice<MicroserviceOptions>(
+    {
+      transport: Transport.GRPC,
+      options: {
+        package: 'nest_demo',
+        protoPath: join(__dirname, 'protos/protobufs/users.proto'),
+        // url - lets you set the port to expose to grpc <default localhost:5000>
+      },
     },
-  });
+    { inheritAppConfig: true },
+  );
   await app.startAllMicroservices();
   await app.listen(3000);
 }
