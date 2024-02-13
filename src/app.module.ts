@@ -11,6 +11,7 @@ import { join } from 'path';
 import { ClientModule } from './clients/client.module';
 import { InvocationCountInterceptor } from './utils/interceptors/invocationCount.interceptor';
 import { APP_INTERCEPTOR } from '@nestjs/core';
+import { ConsumerModule } from './workloads/consumer/consumer.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
     DataModule,
     HttpModule,
     GrpcModule,
+    ConsumerModule,
     GqlModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,

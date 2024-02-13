@@ -8,8 +8,8 @@ import { Metadata } from '@grpc/grpc-js';
 import {
   FindOneRequest,
   CreateUserRequest,
-  User as ProtoUser,
-} from '../../protos/types/users';
+} from '../../protos/types/services/users';
+import { User as ProtoUser } from '../../protos/types/models/users';
 
 @Controller()
 export class UsersGrpcController {

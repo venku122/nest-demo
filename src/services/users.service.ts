@@ -2,12 +2,14 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../data/entities/user.entity';
+import { KafkaClient } from '../clients/kafka.client';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    private readonly kafkaClient: KafkaClient,
     private readonly logger: Logger,
   ) {}
 
@@ -15,6 +17,7 @@ export class UsersService {
     this.logger.log('[users.service] Creating user...');
     const newUser = this.usersRepository.create(userData);
     await this.usersRepository.save(newUser);
+    this.kafkaClient.publishUserCreatedEvent(newUser);
     return newUser;
   }
 

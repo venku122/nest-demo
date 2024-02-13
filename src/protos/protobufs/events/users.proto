@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+import "models/users.proto";
+
+package nest_demo;
+
+message UserCreatedEvent {
+  User new_user = 1;
+}

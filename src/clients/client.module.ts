@@ -1,11 +1,22 @@
 import { Module, Global, Logger } from '@nestjs/common';
 import Redis from 'ioredis';
 import { RedisClient } from './redis.client';
+import { KafkaClient } from './kafka.client';
+import kafkaConfig from '../kafkaConfig';
+import { ClientProxyFactory } from '@nestjs/microservices';
 
 @Global()
 @Module({
+  imports: [],
   providers: [
     Logger,
+    {
+      provide: 'KAFKA_CLIENT',
+      useFactory: () => {
+        return ClientProxyFactory.create(kafkaConfig);
+      },
+      inject: [],
+    },
     {
       provide: 'REDIS_CLIENT',
       useFactory: async () => {
@@ -19,7 +30,8 @@ import { RedisClient } from './redis.client';
       },
     },
     RedisClient,
+    KafkaClient,
   ],
-  exports: ['REDIS_CLIENT', RedisClient],
+  exports: ['REDIS_CLIENT', RedisClient, KafkaClient, 'KAFKA_CLIENT'],
 })
 export class ClientModule {}

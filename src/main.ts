@@ -7,9 +7,12 @@ import * as winston from 'winston';
 
 import { AppModule } from './app.module';
 import tracer from './tracer';
+import kafkaConfig from './kafkaConfig';
 
 async function bootstrap() {
   tracer.start();
+
+  // Setup JSON logger
   const instance = createLogger({
     transports: [
       new winston.transports.Console({
@@ -26,17 +29,25 @@ async function bootstrap() {
     }),
   });
 
+  // Expose GRPC endpoint
   app.connectMicroservice<MicroserviceOptions>(
     {
       transport: Transport.GRPC,
       options: {
         package: 'nest_demo',
-        protoPath: join(__dirname, 'protos/protobufs/users.proto'),
+        protoPath: join(__dirname, 'protos/protobufs/services/users.proto'),
+        loader: {
+          includeDirs: [join(__dirname, 'protos/protobufs')],
+        },
         // url - lets you set the port to expose to grpc <default localhost:5000>
       },
     },
     { inheritAppConfig: true },
   );
+
+  // setup connection to Kafka for publishing and consuming
+  app.connectMicroservice<MicroserviceOptions>(kafkaConfig);
+
   await app.startAllMicroservices();
   await app.listen(3000);
 }
