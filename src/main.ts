@@ -13,9 +13,10 @@ async function bootstrap() {
   tracer.start();
 
   // Setup JSON logger
-  const instance = createLogger({
+  const jsonLogger = createLogger({
     transports: [
-      new winston.transports.Console({
+      new winston.transports.File({
+        filename: 'json.log',
         format: winston.format.combine(
           winston.format.timestamp(),
           winston.format.json(),
@@ -23,9 +24,23 @@ async function bootstrap() {
       }),
     ],
   });
+
+  // Setup console logger
+  const consoleLogger = createLogger({
+    transports: [
+      new winston.transports.Console({
+        format: winston.format.combine(
+          winston.format.timestamp(),
+          winston.format.cli(),
+        ),
+      }),
+    ],
+  });
+
   const app = await NestFactory.create(AppModule, {
+    snapshot: true,
     logger: WinstonModule.createLogger({
-      instance,
+      instance: consoleLogger,
     }),
   });
 

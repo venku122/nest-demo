@@ -12,9 +12,14 @@ import { ClientModule } from './clients/client.module';
 import { InvocationCountInterceptor } from './utils/interceptors/invocationCount.interceptor';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ConsumerModule } from './workloads/consumer/consumer.module';
+import { DevtoolsModule } from '@nestjs/devtools-integration';
 
 @Module({
   imports: [
+    DevtoolsModule.register({
+      http: process.env.NODE_ENV !== 'production',
+      port: 1234,
+    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
