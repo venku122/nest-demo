@@ -21,10 +21,10 @@ import { ClientProxyFactory } from '@nestjs/microservices';
       provide: 'REDIS_CLIENT',
       useFactory: async () => {
         const redis = new Redis({
-          host: 'localhost', // Redis host
-          port: 6379, // Redis port
-          // password: 'yourpassword', // Redis password if needed
-          // db: 0, // Default DB
+          host: process.env.REDIS_URL || 'localhost',
+          port: process.env.REDIS_PORT
+            ? parseInt(process.env.REDIS_PORT)
+            : 6379,
         });
         return redis;
       },

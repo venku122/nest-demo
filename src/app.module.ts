@@ -22,11 +22,13 @@ import { DevtoolsModule } from '@nestjs/devtools-integration';
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'dev_password',
-      database: 'test',
+      host: process.env.POSTGRES_URL || 'localhost',
+      port: process.env.POSTGRES_PORT
+        ? parseInt(process.env.POSTGRES_PORT)
+        : 5432,
+      username: process.env.POSTGRES_USERNAME || 'postgres',
+      password: process.env.POSTGRES_PASSWORD || 'dev_password',
+      database: process.env.POSTGRES_DB_NAME || 'test',
       synchronize: true,
       autoLoadEntities: true,
     }),

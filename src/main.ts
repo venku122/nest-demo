@@ -54,7 +54,7 @@ async function bootstrap() {
         loader: {
           includeDirs: [join(__dirname, 'protos/protobufs')],
         },
-        // url - lets you set the port to expose to grpc <default localhost:5000>
+        url: `${process.env.GRPC_URL}:${process.env.GRPC_PORT}`,
       },
     },
     { inheritAppConfig: true },
@@ -64,6 +64,6 @@ async function bootstrap() {
   app.connectMicroservice<MicroserviceOptions>(kafkaConfig);
 
   await app.startAllMicroservices();
-  await app.listen(3000);
+  await app.listen(process.env.HTTP_PORT || 3001);
 }
 bootstrap();

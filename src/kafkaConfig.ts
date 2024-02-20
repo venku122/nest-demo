@@ -5,12 +5,12 @@ const config: KafkaOptions = {
   transport: Transport.KAFKA,
   options: {
     client: {
-      clientId: 'nest-demo',
-      brokers: ['localhost:9093', 'localhost:9092'],
+      clientId: process.env.KAFKA_CLIENT_ID,
+      brokers: process.env.KAFKA_BROKERS?.split(',') ?? [],
     },
     subscribe: { fromBeginning: true },
     consumer: {
-      groupId: 'nest-demo-consumer',
+      groupId: process.env.KAFKA_CONSUMER_GROUP_ID ?? 'default-consumer-id',
       allowAutoTopicCreation: true,
       partitionAssigners: [PartitionAssigners.roundRobin],
       retry: {
