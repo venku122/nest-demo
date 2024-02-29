@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, Optional } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../data/entities/user.entity';
@@ -9,7 +9,7 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
-    private readonly kafkaClient: KafkaClient,
+    @Optional() private readonly kafkaClient: KafkaClient | undefined,
     private readonly logger: Logger,
   ) {}
 
@@ -17,7 +17,10 @@ export class UsersService {
     this.logger.log('[users.service] Creating user...');
     const newUser = this.usersRepository.create(userData);
     await this.usersRepository.save(newUser);
-    this.kafkaClient.publishUserCreatedEvent(newUser);
+    if (this.kafkaClient) {
+      console.log('publishing event');
+      this.kafkaClient.publishUserCreatedEvent(newUser);
+    }
     return newUser;
   }
 

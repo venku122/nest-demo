@@ -45,23 +45,27 @@ async function bootstrap() {
   });
 
   // Expose GRPC endpoint
-  app.connectMicroservice<MicroserviceOptions>(
-    {
-      transport: Transport.GRPC,
-      options: {
-        package: 'nest_demo',
-        protoPath: join(__dirname, 'protos/protobufs/services/users.proto'),
-        loader: {
-          includeDirs: [join(__dirname, 'protos/protobufs')],
+  if (process.env.EXPOSE_GRPC === 'true') {
+    app.connectMicroservice<MicroserviceOptions>(
+      {
+        transport: Transport.GRPC,
+        options: {
+          package: 'nest_demo',
+          protoPath: join(__dirname, 'protos/protobufs/services/users.proto'),
+          loader: {
+            includeDirs: [join(__dirname, 'protos/protobufs')],
+          },
+          url: `${process.env.GRPC_URL}:${process.env.GRPC_PORT}`,
         },
-        url: `${process.env.GRPC_URL}:${process.env.GRPC_PORT}`,
       },
-    },
-    { inheritAppConfig: true },
-  );
+      { inheritAppConfig: true },
+    );
+  }
 
   // setup connection to Kafka for publishing and consuming
-  app.connectMicroservice<MicroserviceOptions>(kafkaConfig);
+  if (process.env.USE_KAFKA === 'true') {
+    app.connectMicroservice<MicroserviceOptions>(kafkaConfig);
+  }
 
   await app.startAllMicroservices();
   await app.listen(process.env.HTTP_PORT || 3001);
