@@ -13,7 +13,7 @@ async function bootstrap() {
   tracer.start();
 
   // Setup JSON logger
-  const jsonLogger = createLogger({
+  createLogger({
     transports: [
       new winston.transports.File({
         filename: 'json.log',

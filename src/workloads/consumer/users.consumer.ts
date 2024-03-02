@@ -1,4 +1,4 @@
-import { Controller, Inject, Logger, OnModuleInit } from '@nestjs/common';
+import { Controller, Logger } from '@nestjs/common';
 import {
   EventPattern,
   Payload,
